@@ -2,7 +2,7 @@ import OpenAI from 'openai';
 import { getStaticFile, throwIfMissing } from './utils.js';
 import { Client, Databases, Query } from 'appwrite';
 
-export default async ({ req, res }) => {
+export default async ({ req, res, log }) => {
   throwIfMissing(process.env, ['OPENAI_API_KEY', 'APPWRITE_PROJECT_ID', 'APPWRITE_API_ENDPOINT', 'APPWRITE_API_KEY']);
 
   if (req.method === 'GET') {
@@ -46,13 +46,17 @@ export default async ({ req, res }) => {
 
       // дата документс - тут список тем content каждого документа
       const prompt = generatePrompt(group.name, group.documents, answers.documents, group.content);
+      log(prompt)
       const response = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
         max_tokens: parseInt(process.env.OPENAI_MAX_TOKENS ?? '512'),
         messages: [{ role: 'user', content: prompt }],
       });
 
+
       const completion = response.choices[0].message.content;
+
+      log(completion)
 
       await databases.createDocument(
         process.env.APPWRITE_DATABASE_ID,
