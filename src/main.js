@@ -42,6 +42,7 @@ export default async ({ req, res, log, error }) => {
       const questionIds = data.documents.map(doc => doc.$id);
 
       log(body)
+      log(body.projectId)
 
       const answers = await databases.listDocuments(
         process.env.APPWRITE_DATABASE_ID,
