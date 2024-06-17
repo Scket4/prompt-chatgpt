@@ -74,6 +74,7 @@ export default async ({ req, res, log }) => {
     return res.json({ ok: true }, 200);
 
   } catch (err) {
+    log('error', err);
     return res.json({ ok: false, error: err.message }, 500);
   }
 };
