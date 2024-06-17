@@ -11,6 +11,8 @@ export default async ({ req, res, log }) => {
     });
   }
 
+  log('test');
+
   const client = new Client()
     .setEndpoint(process.env.APPWRITE_API_ENDPOINT)
     .setProject(process.env.APPWRITE_PROJECT_ID)
