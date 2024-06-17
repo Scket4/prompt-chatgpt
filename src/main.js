@@ -97,9 +97,9 @@ function generatePrompt(groupName, questions, answers, content) {
 
   questions.forEach(question => {
     const answer = answers.find(ans => ans.questionId === question.$id);
-    prompt += `\n\n${question.content}\n`;
+    prompt += `\n\n${question.label}\n`;
     if (answer) {
-      prompt += `Answer: ${answer.content}\n`;
+      prompt += `Answer: ${answer.text}\n`;
     }
   });
 
