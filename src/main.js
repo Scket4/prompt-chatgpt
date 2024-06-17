@@ -44,6 +44,8 @@ export default async ({ req, res, log, error }) => {
       log(body)
       log(body.projectId)
 
+      log(JSON.stringify(data))
+
       const answers = await databases.listDocuments(
         process.env.APPWRITE_DATABASE_ID,
         'answer',
@@ -56,7 +58,7 @@ export default async ({ req, res, log, error }) => {
       log(JSON.stringify(group))
 
       // дата документс - тут список тем content каждого документа
-      const prompt = generatePrompt(group.name, group.documents, answers.documents, group.content);
+      const prompt = generatePrompt(group.name, data.documents, answers.documents, group.content);
       log(prompt)
       const response = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
