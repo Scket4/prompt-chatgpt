@@ -10,6 +10,7 @@
   "keywords": [],
   "dependencies": {
     "appwrite": "^15.0.0",
+    "node-appwrite": "^13.0.0",
     "openai": "^4.47.1"
   },
   "devDependencies": {

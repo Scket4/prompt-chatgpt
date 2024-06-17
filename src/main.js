@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
 import { getStaticFile, throwIfMissing } from './utils.js';
-import { Client, Databases, Query } from 'appwrite';
+import { Client, Databases, Query } from 'node-appwrite';
 
 export default async ({ req, res, log, error }) => {
   throwIfMissing(process.env, ['OPENAI_API_KEY', 'APPWRITE_PROJECT_ID', 'APPWRITE_API_ENDPOINT', 'APPWRITE_API_KEY']);
@@ -16,7 +16,7 @@ export default async ({ req, res, log, error }) => {
   const client = new Client()
     .setEndpoint(process.env.APPWRITE_API_ENDPOINT)
     .setProject(process.env.APPWRITE_PROJECT_ID)
-    // .setKey(process.env.APPWRITE_API_KEY);
+    .setKey(process.env.APPWRITE_API_KEY);
 
   const databases = new Databases(client);
 
@@ -27,6 +27,8 @@ export default async ({ req, res, log, error }) => {
       process.env.APPWRITE_DATABASE_ID,
       'questionGroup'
     );
+
+    log('after group')
 
     for (const group of groups.documents) {
       const data = await databases.listDocuments(
