@@ -11,7 +11,7 @@ export default async ({ req, res, log, error }) => {
     });
   }
 
-  const body = JSON.stringify(req.body)
+  const body = JSON.parse(req.body)
 
   log('test');
 
