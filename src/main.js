@@ -55,11 +55,9 @@ export default async ({ req, res, log, error }) => {
         ]
       );
 
-      log(JSON.stringify(group))
-
       // дата документс - тут список тем content каждого документа
       const prompt = generatePrompt(group.name, data.documents, answers.documents, group.content);
-      log(prompt)
+      log('PROMPT: ', prompt)
       const response = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
         max_tokens: parseInt(process.env.OPENAI_MAX_TOKENS ?? '512'),
