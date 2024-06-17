@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
 import { getStaticFile, throwIfMissing } from './utils.js';
-import { Client, Databases, Query } from 'node-appwrite';
+import { Client, Databases, Query, ID } from 'node-appwrite';
 
 export default async ({ req, res, log, error }) => {
   throwIfMissing(process.env, ['OPENAI_API_KEY', 'APPWRITE_PROJECT_ID', 'APPWRITE_API_ENDPOINT', 'APPWRITE_API_KEY']);
@@ -73,6 +73,7 @@ export default async ({ req, res, log, error }) => {
       await databases.createDocument(
         process.env.APPWRITE_DATABASE_ID,
         'generatedDocuments',
+        ID.unique(),
         {
           groupId: group.$id,
           content: completion,
