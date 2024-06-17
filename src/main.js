@@ -11,6 +11,8 @@ export default async ({ req, res, log, error }) => {
     });
   }
 
+  const body = JSON.stringify(req.body)
+
   log('test');
 
   const client = new Client()
@@ -39,16 +41,14 @@ export default async ({ req, res, log, error }) => {
 
       const questionIds = data.documents.map(doc => doc.$id);
 
-      log(req)
-      log(req.body)
-      log(JSON.parse(req.body))
+      log(body)
 
       const answers = await databases.listDocuments(
         process.env.APPWRITE_DATABASE_ID,
         'answer',
         [
           Query.contains('questionId', questionIds),
-          Query.equal('projectId', req.body.projectId)
+          Query.equal('projectId', body.projectId)
         ]
       );
 
@@ -72,7 +72,7 @@ export default async ({ req, res, log, error }) => {
         {
           groupId: group.$id,
           content: completion,
-          projectId: req.body.projectId
+          projectId: body.projectId
         }
       );
     }
