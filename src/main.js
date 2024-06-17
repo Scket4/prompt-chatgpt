@@ -53,6 +53,8 @@ export default async ({ req, res, log, error }) => {
         ]
       );
 
+      log(JSON.stringify(group))
+
       // дата документс - тут список тем content каждого документа
       const prompt = generatePrompt(group.name, group.documents, answers.documents, group.content);
       log(prompt)
