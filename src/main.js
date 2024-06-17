@@ -14,7 +14,7 @@ export default async ({ req, res, log }) => {
   const client = new Client()
     .setEndpoint(process.env.APPWRITE_API_ENDPOINT)
     .setProject(process.env.APPWRITE_PROJECT_ID)
-    .setKey(process.env.APPWRITE_API_KEY);
+    // .setKey(process.env.APPWRITE_API_KEY);
 
   const databases = new Databases(client);
 
