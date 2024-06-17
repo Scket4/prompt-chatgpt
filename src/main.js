@@ -2,7 +2,7 @@ import OpenAI from 'openai';
 import { getStaticFile, throwIfMissing } from './utils.js';
 import { Client, Databases, Query } from 'appwrite';
 
-export default async ({ req, res, log }) => {
+export default async ({ req, res, log, error }) => {
   throwIfMissing(process.env, ['OPENAI_API_KEY', 'APPWRITE_PROJECT_ID', 'APPWRITE_API_ENDPOINT', 'APPWRITE_API_KEY']);
 
   if (req.method === 'GET') {
@@ -75,6 +75,8 @@ export default async ({ req, res, log }) => {
 
   } catch (err) {
     log('error', JSON.stringify(err));
+    error(err);
+    log(err.message)
     return res.json({ ok: false, error: err.message }, 500);
   }
 };
