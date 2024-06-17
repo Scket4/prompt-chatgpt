@@ -60,14 +60,13 @@ export default async ({ req, res, log, error }) => {
       log('PROMPT: ', prompt)
       const response = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
-        max_tokens: parseInt(process.env.OPENAI_MAX_TOKENS ?? '512'),
-        messages: [{ role: 'user', content: prompt }],
+        // max_tokens: parseInt(process.env.OPENAI_MAX_TOKENS ?? '512'),
+        messages: [{ role: 'system', content: prompt }],
       });
-
 
       const completion = response.choices[0].message.content;
 
-      log(completion)
+      log("completion: ", completion)
 
       await databases.createDocument(
         process.env.APPWRITE_DATABASE_ID,
