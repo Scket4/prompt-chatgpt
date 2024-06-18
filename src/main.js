@@ -11,7 +11,8 @@ export default async ({ req, res, log, error }) => {
     });
   }
 
-  let generatedAnswers = 'Additional information about project: '
+  // я думаю тут ответы пользвоателя а не ии надо сделать 
+  let generatedAnswers = 'All information about project: '
 
   const body = JSON.parse(req.body)
 
@@ -59,8 +60,6 @@ export default async ({ req, res, log, error }) => {
 
       const completion = response.choices[0].message.content;
 
-      generatedAnswers += completion;
-
       await databases.createDocument(
         process.env.APPWRITE_DATABASE_ID,
         'generatedDocuments',
@@ -89,6 +88,7 @@ function generatePrompt(groupName, questions, answers, content) {
   questions.forEach(question => {
     const answer = answers.find(ans => ans.questionId === question.$id);
     prompt += `\n\n${question.label}\n`;
+    generatedAnswers += `${question.label}: ${answer?.text}\n`
     if (answer) {
       prompt += `Answer: ${answer.text}\n`;
     }
