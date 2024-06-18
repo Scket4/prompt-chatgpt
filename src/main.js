@@ -51,10 +51,10 @@ export default async ({ req, res, log, error }) => {
 
       // дата документс - тут список тем content каждого документа
       const prompt = generatePrompt(group.name, data.documents, answers.documents, group.content);
-   
+
       const response = await openai.chat.completions.create({
         model: 'gpt-4o',
-        max_tokens: 15000,
+        // max_tokens: 15000,
         messages: [{ role: 'user', content: prompt + generatedAnswers  }],
       });
 
@@ -83,7 +83,7 @@ export default async ({ req, res, log, error }) => {
 
   function generatePrompt(groupName, questions, answers, content) {
     let prompt = `Create a detailed and comprehensive document on the topic: ${groupName}. With including content: ${content}`;
-  
+
     questions.forEach(question => {
       const answer = answers.find(ans => ans.questionId === question.$id);
       prompt += `\n\n${question.label}\n`;
