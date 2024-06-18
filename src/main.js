@@ -11,6 +11,8 @@ export default async ({ req, res, log, error }) => {
     });
   }
 
+  let generatedAnswers = 'Additional information about project: '
+
   const body = JSON.parse(req.body)
 
   const client = new Client()
@@ -52,11 +54,12 @@ export default async ({ req, res, log, error }) => {
       const response = await openai.chat.completions.create({
         model: 'gpt-4o',
         // max_tokens: parseInt(process.env.OPENAI_MAX_TOKENS ?? '512'),
-        messages: [{ role: 'system', content: prompt }],
+        messages: [{ role: 'user', content: prompt + generatedAnswers  }],
       });
 
       const completion = response.choices[0].message.content;
 
+      generatedAnswers += completion;
 
       await databases.createDocument(
         process.env.APPWRITE_DATABASE_ID,
