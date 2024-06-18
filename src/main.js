@@ -13,8 +13,6 @@ export default async ({ req, res, log, error }) => {
 
   const body = JSON.parse(req.body)
 
-  log('test');
-
   const client = new Client()
     .setEndpoint(process.env.APPWRITE_API_ENDPOINT)
     .setProject(process.env.APPWRITE_PROJECT_ID)
@@ -30,8 +28,6 @@ export default async ({ req, res, log, error }) => {
       'questionGroup'
     );
 
-    log('after group')
-
     for (const group of groups.documents) {
       const data = await databases.listDocuments(
         process.env.APPWRITE_DATABASE_ID,
@@ -40,11 +36,6 @@ export default async ({ req, res, log, error }) => {
       );
 
       const questionIds = data.documents.map(doc => doc.$id);
-
-      log(body)
-      log(body.projectId)
-
-      log(JSON.stringify(data))
 
       const answers = await databases.listDocuments(
         process.env.APPWRITE_DATABASE_ID,
@@ -57,8 +48,7 @@ export default async ({ req, res, log, error }) => {
 
       // дата документс - тут список тем content каждого документа
       const prompt = generatePrompt(group.name, data.documents, answers.documents, group.content);
-      log('PROMPT: ')
-      log(prompt)
+   
       const response = await openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
         // max_tokens: parseInt(process.env.OPENAI_MAX_TOKENS ?? '512'),
@@ -67,8 +57,6 @@ export default async ({ req, res, log, error }) => {
 
       const completion = response.choices[0].message.content;
 
-      log("completion: ")
-      log(JSON.stringify(response))
 
       await databases.createDocument(
         process.env.APPWRITE_DATABASE_ID,
