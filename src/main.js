@@ -50,7 +50,7 @@ export default async ({ req, res, log, error }) => {
       const prompt = generatePrompt(group.name, data.documents, answers.documents, group.content);
    
       const response = await openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
+        model: 'gpt-4o',
         // max_tokens: parseInt(process.env.OPENAI_MAX_TOKENS ?? '512'),
         messages: [{ role: 'system', content: prompt }],
       });
