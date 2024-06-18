@@ -94,7 +94,7 @@ function generatePrompt(groupName, questions, answers, content) {
     }
   });
 
-  prompt += `\nProvide an in-depth description of the topic:
+  prompt += `\nОТВЕТ НА РУССКОМ ЯЗЫКЕ. НЕ СИЛЬНО ОФИЦИАЛЬНЫЙ СТИЛЬ, БОЛЬШЕ СТИЛЬ РЕСЕРЧА. Provide an in-depth description of the topic:
     - Delve deeply into each point, providing exhaustive information.
     - Include new information and analysis, not just rewriting provided data.
     - Take into account current data, the latest trends, and statistics from reliable sources.
