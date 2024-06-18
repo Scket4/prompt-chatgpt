@@ -54,7 +54,7 @@ export default async ({ req, res, log, error }) => {
    
       const response = await openai.chat.completions.create({
         model: 'gpt-4o',
-        // max_tokens: parseInt(process.env.OPENAI_MAX_TOKENS ?? '512'),
+        max_tokens: 20000,
         messages: [{ role: 'user', content: prompt + generatedAnswers  }],
       });
 
