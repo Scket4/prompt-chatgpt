@@ -54,7 +54,7 @@ export default async ({ req, res, log, error }) => {
    
       const response = await openai.chat.completions.create({
         model: 'gpt-4o',
-        max_tokens: 20000,
+        max_tokens: 15000,
         messages: [{ role: 'user', content: prompt + generatedAnswers  }],
       });
 
@@ -80,40 +80,42 @@ export default async ({ req, res, log, error }) => {
     log(err.message)
     return res.json({ ok: false, error: err.message }, 500);
   }
+
+  function generatePrompt(groupName, questions, answers, content) {
+    let prompt = `Create a detailed and comprehensive document on the topic: ${groupName}. With including content: ${content}`;
+  
+    questions.forEach(question => {
+      const answer = answers.find(ans => ans.questionId === question.$id);
+      prompt += `\n\n${question.label}\n`;
+      generatedAnswers += `${question.label}: ${answer?.text}\n`
+      if (answer) {
+        prompt += `Answer: ${answer.text}\n`;
+      }
+    });
+  
+    prompt += `\nОТВЕТ НА РУССКОМ ЯЗЫКЕ. НЕ СИЛЬНО ОФИЦИАЛЬНЫЙ СТИЛЬ, БОЛЬШЕ СТИЛЬ РЕСЕРЧА. Provide an in-depth description of the topic:
+      - Delve deeply into each point, providing exhaustive information.
+      - Include new information and analysis, not just rewriting provided data.
+      - Take into account current data, the latest trends, and statistics from reliable sources.
+      - Use the internet to search and analyze the necessary information.
+      - Include statistics, data from open sources, research, and current reports.
+      - Provide links to information sources.
+      - Approach the task creatively.
+      - Provide ideas and recommendations that will help improve the understanding of the topic.
+      - Include tables, charts, calculations, and other visual elements for better data representation.
+      - Provide specific examples and case studies that illustrate key points.
+      - The document should be logical and structured.
+      - Use subheadings, numbering, and lists to organize information.
+      - Include an introduction, main content, and conclusion for each topic.
+      - The document should be written in the third person.
+      - Avoid using "our" and "my".
+      - The information should be useful and applicable to a startup.
+      - Include as much useful information as possible for each topic.
+      - The document should be detailed and extensive.
+      - If the topic allows, add tables, charts, calculations, and other visual elements for better understanding and illustration of information.`;
+  
+    return prompt;
+  }
+  
 };
 
-function generatePrompt(groupName, questions, answers, content) {
-  let prompt = `Create a detailed and comprehensive document on the topic: ${groupName}. With including content: ${content}`;
-
-  questions.forEach(question => {
-    const answer = answers.find(ans => ans.questionId === question.$id);
-    prompt += `\n\n${question.label}\n`;
-    generatedAnswers += `${question.label}: ${answer?.text}\n`
-    if (answer) {
-      prompt += `Answer: ${answer.text}\n`;
-    }
-  });
-
-  prompt += `\nОТВЕТ НА РУССКОМ ЯЗЫКЕ. НЕ СИЛЬНО ОФИЦИАЛЬНЫЙ СТИЛЬ, БОЛЬШЕ СТИЛЬ РЕСЕРЧА. Provide an in-depth description of the topic:
-    - Delve deeply into each point, providing exhaustive information.
-    - Include new information and analysis, not just rewriting provided data.
-    - Take into account current data, the latest trends, and statistics from reliable sources.
-    - Use the internet to search and analyze the necessary information.
-    - Include statistics, data from open sources, research, and current reports.
-    - Provide links to information sources.
-    - Approach the task creatively.
-    - Provide ideas and recommendations that will help improve the understanding of the topic.
-    - Include tables, charts, calculations, and other visual elements for better data representation.
-    - Provide specific examples and case studies that illustrate key points.
-    - The document should be logical and structured.
-    - Use subheadings, numbering, and lists to organize information.
-    - Include an introduction, main content, and conclusion for each topic.
-    - The document should be written in the third person.
-    - Avoid using "our" and "my".
-    - The information should be useful and applicable to a startup.
-    - Include as much useful information as possible for each topic.
-    - The document should be detailed and extensive.
-    - If the topic allows, add tables, charts, calculations, and other visual elements for better understanding and illustration of information.`;
-
-  return prompt;
-}
