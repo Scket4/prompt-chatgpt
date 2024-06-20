@@ -26,6 +26,15 @@ export default async ({ req, res, log, error }) => {
   const openai = new OpenAI();
 
   try {
+    await databases.updateDocument(
+      process.env.APPWRITE_DATABASE_ID,
+      'project',
+      body.projectId,
+      {
+        generated: true
+      }
+    );
+    
     const groups = await databases.listDocuments(
       process.env.APPWRITE_DATABASE_ID,
       'questionGroup'
@@ -65,6 +74,7 @@ export default async ({ req, res, log, error }) => {
         'generatedDocuments',
         ID.unique(),
         {
+          name: group.name,
           groupId: group.$id,
           content: completion,
           projectId: body.projectId
