@@ -53,7 +53,8 @@ export default async ({ req, res, log, error }) => {
       const prompt = generatePrompt(group.name, data.documents, answers.documents, group.content);
 
       const response = await openai.chat.completions.create({
-        model: 'gpt-4o',
+        // model: 'gpt-4o',
+        model: 'gpt-3.5-turbo',
         // max_tokens: 15000,
         messages: [{ role: 'user', content: prompt + generatedAnswers  }],
       });
