@@ -55,6 +55,10 @@ export default async ({ req, res, log, error }) => {
         body.projectId
       );
 
+      const questionsWithAnswers = data.documents.filter(question => answers.some(answer => answer.questionId === question.$id));
+
+      log('info', JSON.stringify(questionsWithAnswers));
+
       // дата документс - тут список тем content каждого документа
       const prompt = generatePrompt(group.name, data.documents, answers.documents, group.content, project?.language);
 
@@ -99,12 +103,14 @@ export default async ({ req, res, log, error }) => {
   }
 
   function generatePrompt(groupName, questions, answers, content, language) {
-    let prompt = `Create a detailed and comprehensive document on the topic: ${groupName} on ${language} language. With including content: ${content}`;
+    let prompt = `Create a detailed and comprehensive document on the topic: ${groupName}. With including content: ${content}`;
 
     questions.forEach(question => {
       const answer = answers.find(ans => ans.questionId === question.$id);
       prompt += `\n\n${question.label}\n`;
+
       generatedAnswers += `${question.label}: ${answer?.text}\n`
+
       if (answer) {
         prompt += `Answer: ${answer.text}\n`;
       }
@@ -129,7 +135,9 @@ export default async ({ req, res, log, error }) => {
       - The information should be useful and applicable to a startup.
       - Include as much useful information as possible for each topic.
       - The document should be detailed and extensive.
-      - If the topic allows, add tables, charts, calculations, and other visual elements for better understanding and illustration of information.`;
+      - If the topic allows, add tables, charts, calculations, and other visual elements for better understanding and illustration of information.
+      - Don't use we us our. Describe a project
+      - the document must be on ${language} language!!!`;
   
     return prompt;
   }
