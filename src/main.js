@@ -49,8 +49,14 @@ export default async ({ req, res, log, error }) => {
         ]
       );
 
+      const project = await databases.getDocument(
+        process.env.APPWRITE_DATABASE_ID,
+        'project',
+        body.projectId
+      );
+
       // дата документс - тут список тем content каждого документа
-      const prompt = generatePrompt(group.name, data.documents, answers.documents, group.content);
+      const prompt = generatePrompt(group.name, data.documents, answers.documents, group.content, project?.language);
 
       const response = await openai.chat.completions.create({
         // model: 'gpt-4o',
@@ -92,8 +98,8 @@ export default async ({ req, res, log, error }) => {
     return res.json({ ok: false, error: err.message }, 500);
   }
 
-  function generatePrompt(groupName, questions, answers, content) {
-    let prompt = `Create a detailed and comprehensive document on the topic: ${groupName}. With including content: ${content}`;
+  function generatePrompt(groupName, questions, answers, content, language) {
+    let prompt = `Create a detailed and comprehensive document on the topic: ${groupName} on ${language} language. With including content: ${content}`;
 
     questions.forEach(question => {
       const answer = answers.find(ans => ans.questionId === question.$id);
@@ -104,7 +110,7 @@ export default async ({ req, res, log, error }) => {
       }
     });
   
-    prompt += `\nОТВЕТ НА РУССКОМ ЯЗЫКЕ. НЕ СИЛЬНО ОФИЦИАЛЬНЫЙ СТИЛЬ, БОЛЬШЕ СТИЛЬ РЕСЕРЧА. Provide an in-depth description of the topic:
+    prompt += `\n All content must be buetifyed with markdown. Send me text in markDown. НЕ СИЛЬНО ОФИЦИАЛЬНЫЙ СТИЛЬ, БОЛЬШЕ СТИЛЬ РЕСЕРЧА. Provide an in-depth description of the topic:
       - Delve deeply into each point, providing exhaustive information.
       - Include new information and analysis, not just rewriting provided data.
       - Take into account current data, the latest trends, and statistics from reliable sources.
