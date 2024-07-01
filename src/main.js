@@ -63,8 +63,8 @@ export default async ({ req, res, log, error }) => {
       const prompt = generatePrompt(group.name, data.documents, answers.documents, group.content, project?.language);
 
       const response = await openai.chat.completions.create({
-        // model: 'gpt-4o',
-        model: 'gpt-3.5-turbo',
+        model: 'gpt-4o',
+        // model: 'gpt-3.5-turbo',
         // max_tokens: 15000,
         messages: [{ role: 'user', content: prompt + generatedAnswers  }],
       });
@@ -137,7 +137,7 @@ export default async ({ req, res, log, error }) => {
       - The document should be detailed and extensive.
       - If the topic allows, add tables, charts, calculations, and other visual elements for better understanding and illustration of information.
       - Don't use we us our. Describe a project
-      - the document must be on ${language} language!!!`;
+      - the document must be in ${language} language!!!`;
   
     return prompt;
   }
