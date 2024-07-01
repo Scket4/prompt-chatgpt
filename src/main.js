@@ -49,13 +49,15 @@ export default async ({ req, res, log, error }) => {
         ]
       );
 
+      log('answers', JSON.stringify(answers));
+
       const project = await databases.getDocument(
         process.env.APPWRITE_DATABASE_ID,
         'project',
         body.projectId
       );
 
-      const questionsWithAnswers = data.documents.filter(question => answers.some(answer => answer.questionId === question.$id));
+      const questionsWithAnswers = data.documents.filter(question => answers.documents.some(answer => answer.questionId === question.$id));
 
       log('info', JSON.stringify(questionsWithAnswers));
 
