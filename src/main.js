@@ -139,6 +139,7 @@ export default async ({ req, res, log, error }) => {
       - The document should be detailed and extensive.
       - If the topic allows, add tables, charts, calculations, and other visual elements for better understanding and illustration of information.
       - Don't use we us our. Describe a project
+      - Не надо повторять то что писал пользователь. Он это знает. Твоя задача проанализировать и предоставить новую информацию!!!!!!!!!!
       - the document must be in ${language} language!!!`;
   
     return prompt;
